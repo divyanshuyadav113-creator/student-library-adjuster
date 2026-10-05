@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Issue Book{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Circulation</span>
+    <h2>Issue a Book</h2>
+  </div>
+</div>
+
+<div class="card form-card">
+  {% if books and members %}
+  <form method="post">
+    <div class="field">
+      <label>Book</label>
+      <select name="book_id" required>
+        {% for b in books %}
+        <option value="{{ b.id }}">{{ b.title }} — {{ b.available_copies }} available</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Member</label>
+      <select name="member_id" required>
+        {% for m in members %}
+        <option value="{{ m.id }}">{{ m.name }} ({{ m.email }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-brass">Issue Book (14-day loan)</button>
+  </form>
+  {% elif not books %}
+  <div class="empty-state">No copies are available to issue right now.</div>
+  {% else %}
+  <div class="empty-state">Register a member first before issuing a book.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

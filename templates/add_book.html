@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Add Book{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Catalog · new entry</span>
+    <h2>Add a Book</h2>
+  </div>
+</div>
+
+<div class="card form-card">
+  <form method="post">
+    <div class="field">
+      <label>ISBN</label>
+      <input type="text" name="isbn" required placeholder="e.g. 978-0143127550">
+    </div>
+    <div class="field">
+      <label>Title</label>
+      <input type="text" name="title" required placeholder="Book title">
+    </div>
+    <div class="field">
+      <label>Author</label>
+      <input type="text" name="author" required placeholder="Author name">
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <input type="text" name="category" placeholder="Fiction, Science, History...">
+    </div>
+    <div class="field">
+      <label>Total copies</label>
+      <input type="number" name="total_copies" value="1" min="1" required>
+    </div>
+    <button type="submit" class="btn btn-brass">Save &amp; Generate QR Code</button>
+  </form>
+</div>
+
+{% endblock %}

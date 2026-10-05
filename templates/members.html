@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Members{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Members · {{ members|length }} registered</span>
+    <h2>Member Registry</h2>
+  </div>
+  <a href="{{ url_for('add_member') }}" class="btn btn-brass">+ Add Member</a>
+</div>
+
+<div class="card" style="padding:0;">
+{% if members %}
+<table>
+  <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr></thead>
+  <tbody>
+    {% for m in members %}
+    <tr>
+      <td><strong>{{ m.name }}</strong></td>
+      <td class="mono">{{ m.email }}</td>
+      <td class="mono">{{ m.phone or '—' }}</td>
+      <td class="mono">{{ m.joined_on.split(' ')[0] if m.joined_on else '' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">No members registered yet.</div>
+{% endif %}
+</div>
+
+{% endblock %}

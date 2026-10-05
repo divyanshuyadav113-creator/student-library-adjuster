@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} · QR{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Catalog · shelf tag</span>
+    <h2>{{ book.title }}</h2>
+  </div>
+  <a href="{{ url_for('books') }}" class="btn btn-outline">&larr; Back to catalog</a>
+</div>
+
+<div class="card" style="max-width:420px;">
+  <p class="mono" style="color:var(--ink-soft); font-size:13px;">{{ book.author }} &middot; ISBN {{ book.isbn }}</p>
+
+  {% if book.qr_path %}
+  <div class="qr-frame">
+    <img src="{{ url_for('static', filename=book.qr_path) }}" alt="QR code for {{ book.title }}" width="240" height="240">
+  </div>
+  <p style="margin-top:16px; font-size:13px; color:var(--ink-soft);">
+    Print this and stick it inside the cover or on the shelf. Scanning it
+    with any phone camera reveals the book's ID, ISBN and title for a
+    quick shelf lookup.
+  </p>
+  {% else %}
+  <div class="empty-state">No QR code on file for this book yet.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

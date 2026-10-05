@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Add Member{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Members · new entry</span>
+    <h2>Register a Member</h2>
+  </div>
+</div>
+
+<div class="card form-card">
+  <form method="post">
+    <div class="field">
+      <label>Full name</label>
+      <input type="text" name="name" required placeholder="Jane Doe">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" name="email" required placeholder="jane@example.com">
+    </div>
+    <div class="field">
+      <label>Phone (optional)</label>
+      <input type="text" name="phone" placeholder="+1 555 000 0000">
+    </div>
+    <button type="submit" class="btn btn-brass">Add Member</button>
+  </form>
+</div>
+
+{% endblock %}

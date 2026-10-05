@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Ledger{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Full record · {{ transactions|length }} entries</span>
+    <h2>Transaction Ledger</h2>
+  </div>
+</div>
+
+<div class="card" style="padding:0;">
+{% if transactions %}
+<table>
+  <thead><tr><th>Title</th><th>Member</th><th>Issued</th><th>Due</th><th>Returned</th><th>Status</th><th>Fine</th></tr></thead>
+  <tbody>
+    {% for t in transactions %}
+    <tr>
+      <td><strong>{{ t.title }}</strong></td>
+      <td>{{ t.member_name }}</td>
+      <td class="mono">{{ t.issue_date }}</td>
+      <td class="mono">{{ t.due_date }}</td>
+      <td class="mono">{{ t.return_date or '—' }}</td>
+      <td>
+        {% if t.status == 'RETURNED' %}
+          <span class="stamp stamp-returned">returned</span>
+        {% else %}
+          <span class="stamp stamp-issued">on loan</span>
+        {% endif %}
+      </td>
+      <td class="mono" style="{{ 'color:var(--stamp-red);' if t.fine_amount else '' }}">
+        {{ '$%.2f'|format(t.fine_amount) if t.fine_amount else '—' }}
+        {% if t.fine_amount and not t.fine_paid %}
+        <form method="post" action="{{ url_for('pay_fine', transaction_id=t.id) }}" style="display:inline;">
+          <button type="submit" class="btn btn-outline btn-sm">Mark paid</button>
+        </form>
+        {% elif t.fine_amount and t.fine_paid %}
+        <span style="font-size:11px; color:var(--teal);">(paid)</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">No transactions recorded yet.</div>
+{% endif %}
+</div>
+
+{% endblock %}

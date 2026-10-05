@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Return Book{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Circulation · {{ active|length }} on loan</span>
+    <h2>Return a Book</h2>
+  </div>
+</div>
+
+<div class="card" style="padding:0;">
+{% if active %}
+<table>
+  <thead><tr><th>Title</th><th>Member</th><th>Issued</th><th>Due</th><th>Status</th><th>Fine so far</th><th></th></tr></thead>
+  <tbody>
+    {% for t in active %}
+    <tr>
+      <td><strong>{{ t.title }}</strong></td>
+      <td>{{ t.member_name }}</td>
+      <td class="mono">{{ t.issue_date }}</td>
+      <td class="mono">{{ t.due_date }}</td>
+      <td>
+        {% if t.is_overdue %}
+          <span class="stamp stamp-overdue">overdue</span>
+        {% else %}
+          <span class="stamp stamp-issued">on loan</span>
+        {% endif %}
+      </td>
+      <td class="mono" style="{{ 'color:var(--stamp-red);' if t.current_fine else '' }}">
+        {{ '$%.2f'|format(t.current_fine) if t.current_fine else '—' }}
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('return_book_view') }}">
+          <input type="hidden" name="transaction_id" value="{{ t.id }}">
+          <button type="submit" class="btn btn-brass btn-sm">Return</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">No books currently on loan.</div>
+{% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Fine Calculator{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Tools</span>
+    <h2>Fine Calculator</h2>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="card form-card">
+    <form method="post">
+      <div class="field">
+        <label>Due date</label>
+        <input type="date" name="due_date" required>
+      </div>
+      <div class="field">
+        <label>Return date (leave blank for "as of today")</label>
+        <input type="date" name="return_date">
+      </div>
+      <button type="submit" class="btn btn-brass">Calculate Fine</button>
+    </form>
+    <p style="font-size:12px; color:var(--ink-soft); margin-top:16px;">
+      Policy: $5.00 per day overdue, capped at $200.00.
+    </p>
+  </div>
+
+  {% if result %}
+  <div class="card">
+    <div class="section-title" style="margin-top:0;">Result</div>
+    <p class="mono">Due date: {{ result.due_date }}</p>
+    <p class="mono">Checked against: {{ result.checked_against }}</p>
+    <p class="mono">Days overdue: {{ result.overdue_days }}</p>
+    <p class="mono">Rate per day: ${{ "%.2f"|format(result.rate_per_day) }}</p>
+    <hr style="border:none; border-top:1px dashed var(--line); margin:16px 0;">
+    <div class="stat-num" style="color: {{ 'var(--stamp-red)' if result.fine_amount else 'var(--teal)' }};">
+      ${{ "%.2f"|format(result.fine_amount) }}
+    </div>
+    {% if result.capped %}<p style="font-size:12px; color:var(--stamp-red);">Fine capped at policy maximum.</p>{% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Catalog{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Catalog · {{ books|length }} titles</span>
+    <h2>Book Catalog</h2>
+  </div>
+  <a href="{{ url_for('add_book') }}" class="btn btn-brass">+ Add Book</a>
+</div>
+
+<form method="get" class="field" style="max-width:360px; margin-bottom:20px;">
+  <input type="text" name="q" placeholder="Search by title, author or ISBN..." value="{{ search }}">
+</form>
+
+<div class="card" style="padding:0;">
+{% if books %}
+<table>
+  <thead>
+    <tr><th></th><th>Title</th><th>Author</th><th>ISBN</th><th>Category</th><th>Availability</th><th>QR</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for b in books %}
+    <tr>
+      <td><span class="spine-tag" style="background: hsl({{ (b.category|length * 47) % 360 }}, 45%, 40%);"></span></td>
+      <td><strong>{{ b.title }}</strong></td>
+      <td>{{ b.author }}</td>
+      <td class="mono">{{ b.isbn }}</td>
+      <td>{{ b.category }}</td>
+      <td>
+        {% if b.available_copies > 0 %}
+          <span class="stamp stamp-available">{{ b.available_copies }}/{{ b.total_copies }} available</span>
+        {% else %}
+          <span class="stamp stamp-overdue">all checked out</span>
+        {% endif %}
+      </td>
+      <td><a href="{{ url_for('view_qr', book_id=b.id) }}" class="btn btn-outline btn-sm">View QR</a></td>
+      <td>
+        <form method="post" action="{{ url_for('delete_book', book_id=b.id) }}" onsubmit="return confirm('Remove this book from the catalog?');">
+          <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">No books match yet. Try a different search, or add your first title.</div>
+{% endif %}
+</div>
+
+{% endblock %}

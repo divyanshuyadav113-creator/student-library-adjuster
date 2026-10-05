@@ -1,0 +1,18 @@
+# Database
+library.db
+
+# Generated QR codes (regenerated automatically when books are added)
+static/qrcodes/*.png
+!static/qrcodes/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

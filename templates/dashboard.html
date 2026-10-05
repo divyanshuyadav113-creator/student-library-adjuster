@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">Overview · today</span>
+    <h2>Reading Room Dashboard</h2>
+  </div>
+  <a href="{{ url_for('add_book') }}" class="btn btn-brass">+ Add Book</a>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-hole"></div>
+    <div class="stat-num">{{ stats.total_titles }}</div>
+    <span class="stat-label">Titles in catalog</span>
+  </div>
+  <div class="stat-card"><div class="stat-hole"></div>
+    <div class="stat-num">{{ stats.available_copies }}/{{ stats.total_copies }}</div>
+    <span class="stat-label">Copies available</span>
+  </div>
+  <div class="stat-card"><div class="stat-hole"></div>
+    <div class="stat-num">{{ stats.active_loans }}</div>
+    <span class="stat-label">Books on loan</span>
+  </div>
+  <div class="stat-card accent"><div class="stat-hole"></div>
+    <div class="stat-num">{{ stats.overdue_count }}</div>
+    <span class="stat-label">Overdue right now</span>
+  </div>
+</div>
+
+<div class="two-col">
+  <div>
+    <div class="section-title">Fines</div>
+    <div class="card">
+      <div class="card-row">
+        <div>
+          <div class="stat-label mono">Collected to date</div>
+          <div class="stat-num" style="font-size:26px;">${{ "%.2f"|format(stats.fines_collected) }}</div>
+        </div>
+        <div>
+          <div class="stat-label mono">Outstanding (open loans)</div>
+          <div class="stat-num" style="font-size:26px; color:var(--stamp-red);">${{ "%.2f"|format(stats.fines_outstanding) }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Catalog by category</div>
+    <div class="card">
+      {% for cat, count in stats.categories.items() %}
+      <div class="category-bar-row">
+        <span style="width:110px;">{{ cat }}</span>
+        <div class="category-bar-track">
+          <div class="category-bar-fill" style="width: {{ (count / stats.total_titles * 100) if stats.total_titles else 0 }}%;"></div>
+        </div>
+        <span>{{ count }}</span>
+      </div>
+      {% else %}
+      <div class="empty-state">No books in the catalog yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Overdue right now</div>
+    <div class="card" style="padding:0;">
+      {% if stats.overdue_list %}
+      <table>
+        <thead><tr><th>Title</th><th>Member</th><th>Due</th><th>Fine so far</th></tr></thead>
+        <tbody>
+          {% for t in stats.overdue_list %}
+          <tr>
+            <td>{{ t.title }}</td>
+            <td>{{ t.member_name }}</td>
+            <td class="mono">{{ t.due_date }}</td>
+            <td class="mono" style="color:var(--stamp-red);">${{ "%.2f"|format(t.current_fine) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">Nothing overdue — the shelves are happy.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Library{% endblock %} · Stackroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="frame">
+  <aside class="drawer">
+    <div class="drawer-label">
+      <span class="drawer-eyebrow">Est. Collection</span>
+      <h1 class="drawer-title">Stackroom</h1>
+      <span class="drawer-sub">library management</span>
+    </div>
+
+    <nav class="drawer-nav">
+      <a href="{{ url_for('dashboard') }}" class="{{ 'is-active' if request.endpoint=='dashboard' }}">
+        <span class="tab-index">01</span> Dashboard
+      </a>
+      <a href="{{ url_for('books') }}" class="{{ 'is-active' if request.endpoint in ['books','add_book','view_qr'] }}">
+        <span class="tab-index">02</span> Catalog
+      </a>
+      <a href="{{ url_for('members') }}" class="{{ 'is-active' if request.endpoint in ['members','add_member'] }}">
+        <span class="tab-index">03</span> Members
+      </a>
+      <a href="{{ url_for('issue') }}" class="{{ 'is-active' if request.endpoint=='issue' }}">
+        <span class="tab-index">04</span> Issue Book
+      </a>
+      <a href="{{ url_for('return_book_view') }}" class="{{ 'is-active' if request.endpoint=='return_book_view' }}">
+        <span class="tab-index">05</span> Return Book
+      </a>
+      <a href="{{ url_for('fine_calculator') }}" class="{{ 'is-active' if request.endpoint=='fine_calculator' }}">
+        <span class="tab-index">06</span> Fine Calculator
+      </a>
+      <a href="{{ url_for('history') }}" class="{{ 'is-active' if request.endpoint=='history' }}">
+        <span class="tab-index">07</span> Ledger
+      </a>
+    </nav>
+
+    <div class="drawer-footer">card no. 001 — all transactions logged</div>
+  </aside>
+
+  <main class="content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-stack">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>
